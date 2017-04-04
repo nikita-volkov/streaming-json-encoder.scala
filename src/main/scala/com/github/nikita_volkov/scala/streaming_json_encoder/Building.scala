@@ -113,6 +113,13 @@ object Building {
       override def apply(input: Nothing, generator: JsonGenerator) = {}
     }
   
+  val boolean =
+    new NodeEncoder[Boolean] {
+      @inline
+      override def apply(input: Boolean, generator: JsonGenerator) =
+        generator.writeBoolean(input)
+    }
+  
   /**
     * String encoder.
     */
@@ -122,6 +129,35 @@ object Building {
       override def apply(input: String, generator: JsonGenerator) =
         generator.writeString(input)
     }
+  
+  val numberFromInt =
+    new NodeEncoder[Int] {
+      @inline
+      override def apply(input: Int, generator: JsonGenerator) =
+        generator.writeNumber(input)
+    }
+  
+  val numberFromLong =
+    new NodeEncoder[Long] {
+      @inline
+      override def apply(input: Long, generator: JsonGenerator) =
+        generator.writeNumber(input)
+    }
+  
+  val numberFromFloat =
+    new NodeEncoder[Float] {
+      @inline
+      override def apply(input: Float, generator: JsonGenerator) =
+        generator.writeNumber(input)
+    }
+  
+  val numberFromDouble =
+    new NodeEncoder[Double] {
+      @inline
+      override def apply(input: Double, generator: JsonGenerator) =
+        generator.writeNumber(input)
+    }
+  
   
   /**
     * Encodes any iterable value.
