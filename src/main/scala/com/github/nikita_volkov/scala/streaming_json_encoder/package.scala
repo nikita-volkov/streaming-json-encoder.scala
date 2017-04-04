@@ -1,4 +1,4 @@
-package com.github.nikita_volkov.scala.streaming_json_encoder
+package com.github.nikita_volkov.scala
 
 import java.io.{ByteArrayOutputStream, OutputStream}
 
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.{JsonFactory, JsonGenerator}
 
 import scalaz.{Contravariant, Divisible}
 
-object Building {
+package object streaming_json_encoder {
   
   private val jsonFactory =
     new JsonFactory()
@@ -86,11 +86,11 @@ object Building {
   
   implicit val objectEncoderDivisible =
     new Divisible[ObjectEncoder] {
-    
+      
       @inline
       override def conquer[A] =
         nilObjectEncoder.asInstanceOf[ObjectEncoder[A]]
-    
+      
       @inline
       override def divide[A, B, C](fa: ObjectEncoder[A], fb: ObjectEncoder[B])(f: (C) => (A, B)) =
         new ObjectEncoder[C] {
@@ -101,7 +101,7 @@ object Building {
                 fb(b, generator)
             }
         }
-  
+      
       @inline
       override def contramap[A, B](r: ObjectEncoder[A])(f: (B) => A) =
         objectEncoderContravariant.contramap(r)(f)
