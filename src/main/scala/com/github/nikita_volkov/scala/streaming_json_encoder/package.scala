@@ -90,8 +90,8 @@ package object streaming_json_encoder {
   /**
     * A composable encoder of an arbitrary data-structure as an object.
     */
-  trait ObjectEncoder[object_] {
-    def apply(input: object_, generator: JsonGenerator)
+  trait ObjectEncoder[obj] {
+    def apply(input: obj, generator: JsonGenerator)
   }
   
   implicit val objectEncoderDivisible =
@@ -208,7 +208,7 @@ package object streaming_json_encoder {
     }
   
   @inline
-  def object_[key, value](keyToString: key => String, valueEncoder: NodeEncoder[value]) =
+  def obj[key, value](keyToString: key => String, valueEncoder: NodeEncoder[value]) =
     new NodeEncoder[Iterable[(key, value)]] {
       @inline
       override def apply(input: Iterable[(key, value)], generator: JsonGenerator) = {
@@ -222,10 +222,10 @@ package object streaming_json_encoder {
     }
   
   @inline
-  def object_[object_](objectEncoder: ObjectEncoder[object_]) =
-    new NodeEncoder[object_] {
+  def obj[obj](objectEncoder: ObjectEncoder[obj]) =
+    new NodeEncoder[obj] {
       @inline
-      override def apply(input: object_, generator: JsonGenerator) = {
+      override def apply(input: obj, generator: JsonGenerator) = {
         generator.writeStartObject()
         objectEncoder.apply(input, generator)
         generator.writeEndObject()
