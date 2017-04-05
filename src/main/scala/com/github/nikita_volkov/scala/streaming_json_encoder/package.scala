@@ -200,6 +200,14 @@ package object streaming_json_encoder {
     }
   
   @inline
+  def element[element](elementEncoder: NodeEncoder[element]) =
+    new ArrayEncoder[element] {
+      @inline
+      override def apply(input: element, generator: JsonGenerator) =
+        elementEncoder(input, generator)
+    }
+  
+  @inline
   def object_[key, value](keyToString: key => String, valueEncoder: NodeEncoder[value]) =
     new NodeEncoder[Iterable[(key, value)]] {
       @inline
