@@ -74,16 +74,6 @@ package object streaming_json_encoder {
     def apply(input: object_, generator: JsonGenerator)
   }
   
-  implicit val objectEncoderContravariant =
-    new Contravariant[ObjectEncoder] {
-      @inline
-      override def contramap[A, B](fa: ObjectEncoder[A])(f: (B) => A) =
-        new ObjectEncoder[B] {
-          override def apply(input: B, generator: JsonGenerator) =
-            fa(f(input), generator)
-        }
-    }
-  
   implicit val objectEncoderDivisible =
     new Divisible[ObjectEncoder] {
       
@@ -103,10 +93,13 @@ package object streaming_json_encoder {
                 fb(b, generator)
             }
         }
-      
+  
       @inline
-      override def contramap[A, B](r: ObjectEncoder[A])(f: (B) => A) =
-        objectEncoderContravariant.contramap(r)(f)
+      override def contramap[A, B](fa: ObjectEncoder[A])(f: (B) => A) =
+        new ObjectEncoder[B] {
+          override def apply(input: B, generator: JsonGenerator) =
+            fa(f(input), generator)
+        }
       
     }
   
