@@ -6,7 +6,7 @@
 
   <groupId>com.github.nikita-volkov.scala</groupId>
   <artifactId>streaming-json-encoder</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>1</version>
 
   <name>streaming-json-encoder</name>
   <description>
