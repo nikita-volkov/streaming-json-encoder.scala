@@ -89,7 +89,9 @@ package object streaming_json_encoder {
       
       @inline
       override def conquer[A] =
-        nilObjectEncoder.asInstanceOf[ObjectEncoder[A]]
+        new ObjectEncoder[A] {
+          override def apply(input: A, generator: JsonGenerator) = {}
+        }
       
       @inline
       override def divide[A, B, C](fa: ObjectEncoder[A], fb: ObjectEncoder[B])(f: (C) => (A, B)) =
@@ -106,11 +108,6 @@ package object streaming_json_encoder {
       override def contramap[A, B](r: ObjectEncoder[A])(f: (B) => A) =
         objectEncoderContravariant.contramap(r)(f)
       
-    }
-  
-  private val nilObjectEncoder =
-    new ObjectEncoder[Nothing] {
-      override def apply(input: Nothing, generator: JsonGenerator) = {}
     }
   
   val boolean =
