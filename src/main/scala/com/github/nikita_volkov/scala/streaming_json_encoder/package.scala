@@ -57,15 +57,35 @@ package object streaming_json_encoder {
     def apply(input: array, generator: JsonGenerator)
   }
   
-  implicit val arrayEncoderContravariant =
-    new Contravariant[ArrayEncoder] {
+  implicit val arrayEncoderDivisible =
+    new Divisible[ArrayEncoder] {
+      
+      @inline
+      override def conquer[A] =
+        new ArrayEncoder[A] {
+          override def apply(input: A, generator: JsonGenerator) = {}
+        }
+      
+      @inline
+      override def divide[A, B, C](fa: ArrayEncoder[A], fb: ArrayEncoder[B])(f: (C) => (A, B)) =
+        new ArrayEncoder[C] {
+          override def apply(input: C, generator: JsonGenerator) =
+            f(input) match {
+              case (a, b) =>
+                fa(a, generator)
+                fb(b, generator)
+            }
+        }
+      
       @inline
       override def contramap[A, B](fa: ArrayEncoder[A])(f: (B) => A) =
         new ArrayEncoder[B] {
           override def apply(input: B, generator: JsonGenerator) =
             fa(f(input), generator)
         }
+      
     }
+  
   
   /**
     * A composable encoder of an arbitrary data-structure as an object.
