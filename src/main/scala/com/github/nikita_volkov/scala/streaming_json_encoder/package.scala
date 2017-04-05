@@ -225,7 +225,7 @@ package object streaming_json_encoder {
     }
   
   @inline
-  def at[value](key: String, valueEncoder: NodeEncoder[value]) =
+  def row[value](key: String, valueEncoder: NodeEncoder[value]) =
     new ObjectEncoder[value] {
       @inline
       override def apply(input: value, generator: JsonGenerator) = {
